@@ -1,11 +1,22 @@
 <template>
   <ul>
-    <li></li>
+    <DisplayImage
+      v-for="res in storedResources"
+      :key="res.id"
+      :title="res.title"
+      :description="res.description"
+      :link="res.link"
+    />
   </ul>
 </template>
 
 <script>
+import DisplayImage from "./components/DisplayImage.vue";
+
 export default {
+  components: {
+    DisplayImage,
+  },
   data() {
     return {
       storedResources: [
@@ -26,18 +37,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
