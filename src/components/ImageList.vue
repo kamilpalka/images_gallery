@@ -1,110 +1,74 @@
 <template>
-  <div class="image-list">
-    <div class="image-item" v-for="image in loadedImages" :key="image.id">
-      <image-item :image="loadedImages"></image-item>
-    </div>
-    <button v-if="hasMore" @click="loadMore" class="load-more">
-      Load More
-    </button>
+  <div>
+    <v-app>
+      <v-main>
+        <v-container>
+          <v-row justify="center">
+            <v-col cols="12">
+              <h1 class="text-center">Image Gallery</h1>
+            </v-col>
+            <v-col
+              cols="12"
+              sm="6"
+              md="4"
+              lg="3"
+              v-for="image in paginatedImages"
+              :key="image.id"
+            >
+              <v-card class="mb-4">
+                <v-img
+                  :src="image.download_url"
+                  :alt="image.author"
+                  height="200"
+                ></v-img>
+                <v-card-text class="text-center">{{
+                  image.author
+                }}</v-card-text>
+              </v-card>
+            </v-col>
+            <v-col cols="12" v-if="paginatedImages.length === 0">
+              <p class="text-center">No images found.</p>
+            </v-col>
+            <v-col cols="12" v-else>
+              <v-btn block color="primary" @click="loadMore">Load More</v-btn>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-main>
+    </v-app>
   </div>
 </template>
 
 <script>
-import ImageItem from "./ImageItem.vue";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
-  components: ImageItem,
-  data() {
-    return {
-      images: [],
-      page: 1,
-      pageSize: 20,
-      loadedImages: [],
-    };
-  },
   computed: {
-    paginatedImages() {
-      return this.loadedImages;
-    },
-    hasMore() {
-      return this.page * this.pageSize < this.images.length;
-    },
-  },
-  mounted() {
-    this.fetchImages();
+    //paginatedImages() { return this.$store.getters.paginatedImages; },
+    ...mapGetters(["paginatedImages"]),
   },
   methods: {
-    fetchImages() {
-      fetch("https://picsum.photos/v2/list?limit=100")
-        .then((response) => response.json())
-        .then((data) => {
-          this.images = data.sort((a, b) => a.author.localeCompare(b.author));
-          this.loadMore();
-          //console.log(data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    },
+    ...mapActions(["fetchImages"]),
     loadMore() {
-      const startIndex = (this.page - 1) * this.pageSize;
-      const endIndex = this.page * this.pageSize;
-      this.loadedImages = [
-        ...this.loadedImages,
-        ...this.images.slice(startIndex, endIndex),
-      ];
-      this.page++;
+      this.$store
+        .dispatch(["fetchImages"])
+        .then(() => this.$store.commit(["incrementPage"]));
     },
+  },
+  created() {
+    this.fetchImages();
   },
 };
 </script>
 
-<style scoped>
-.image-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-  margin-bottom: 20px;
+<style>
+html,
+body,
+#app {
+  height: 100%;
 }
 
-.image-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 200px;
-}
-
-.image {
-  width: 100%;
-  height: auto;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.author {
-  margin-top: 10px;
-  font-size: 14px;
-  color: #333;
-  text-align: center;
-}
-
-.load-more {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.load-more:hover {
-  background-color: #0056b3;
+.v-card-text {
+  color: #555;
 }
 </style>

@@ -24,16 +24,24 @@ const store = createStore({
     setPage(state, page) {
       state.page = page;
     },
+    incrementPage(state) {
+      state.page++;
+    },
   },
   actions: {
-    async fetchImages({ context }) {
-      try {
-        const response = await fetch("https://picsum.photos/v2/list");
-        const images = await response.json();
-        context.commit("setImages", images);
-      } catch (error) {
-        console.log(error);
-      }
+    async fetchImages(context) {
+      const page = context.state.page;
+      const limit = context.state.limit;
+      const url = `https://picsum.photos/v2/list?page=${page}&limit=${limit}`;
+
+      await fetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+          context.commit("setImages", data);
+        })
+        .catch((error) => {
+          console.error("Error fetching images:", error);
+        });
     },
   },
 });
