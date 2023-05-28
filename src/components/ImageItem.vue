@@ -1,5 +1,6 @@
 <template>
   <div class="image-item">
+    <p>wwwwwwww</p>
     <img :src="getImageUrl(image.id)" :alt="image.author" />
     <p class="author">{{ image.author }}</p>
   </div>
@@ -7,6 +8,9 @@
 
 <script>
 export default {
+  mounted() {
+    console.log("22");
+  },
   props: {
     image: Object,
   },

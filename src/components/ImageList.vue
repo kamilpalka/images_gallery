@@ -1,8 +1,7 @@
 <template>
   <div class="image-list">
-    <div class="image-item" v-for="image in paginatedImages" :key="image.id">
-      <image-item :image="images"></image-item>
-      <p class="author">{{ image.author }}</p>
+    <div class="image-item" v-for="image in loadedImages" :key="image.id">
+      <image-item :image="loadedImages"></image-item>
     </div>
     <button v-if="hasMore" @click="loadMore" class="load-more">
       Load More
@@ -36,12 +35,12 @@ export default {
   },
   methods: {
     fetchImages() {
-      fetch("https://picsum.photos/v2/list?limit=300")
+      fetch("https://picsum.photos/v2/list?limit=100")
         .then((response) => response.json())
         .then((data) => {
           this.images = data.sort((a, b) => a.author.localeCompare(b.author));
           this.loadMore();
-          console.log(data);
+          //console.log(data);
         })
         .catch((error) => {
           console.error(error);
