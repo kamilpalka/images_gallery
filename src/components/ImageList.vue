@@ -6,6 +6,7 @@
           <v-row justify="center">
             <v-col cols="12">
               <h1 class="text-center">Image Gallery</h1>
+              <h2>{{ $store.state.page }}</h2>
             </v-col>
             <v-col
               cols="12"
@@ -26,7 +27,7 @@
                 }}</v-card-text>
               </v-card>
             </v-col>
-            <v-col cols="12" v-if="paginatedImages.length === 0">
+            <v-col cols="12" v-if="paginatedImages === 0">
               <p class="text-center">No images found.</p>
             </v-col>
             <v-col cols="12" v-else>
@@ -50,12 +51,10 @@ export default {
   methods: {
     ...mapActions(["fetchImages"]),
     loadMore() {
-      this.$store
-        .dispatch(["fetchImages"])
-        .then(() => this.$store.commit(["incrementPage"]));
+      this.$store.dispatch("fetchImages");
     },
   },
-  created() {
+  mounted() {
     this.fetchImages();
   },
 };

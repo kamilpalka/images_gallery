@@ -4,7 +4,7 @@ const store = createStore({
   state() {
     return {
       images: [],
-      page: 1,
+      page: 0,
       maxImages: 20,
     };
   },
@@ -14,15 +14,13 @@ const store = createStore({
     paginatedImages: (state, getters) => {
       const start = (state.page - 1) * state.maxImages;
       const end = start + state.maxImages;
+      console.log(getters.sortImages.slice(start, end));
       return getters.sortImages.slice(start, end);
     },
   },
   mutations: {
     setImages(state, images) {
       state.images = images;
-    },
-    setPage(state, page) {
-      state.page = page;
     },
     incrementPage(state) {
       state.page++;
@@ -31,13 +29,13 @@ const store = createStore({
   actions: {
     async fetchImages(context) {
       const page = context.state.page;
-      const limit = context.state.limit;
-      const url = `https://picsum.photos/v2/list?page=${page}&limit=${limit}`;
-
+      const url = `https://picsum.photos/v2/list?page=${page}&limit=100`;
+      console.log(url);
       await fetch(url)
         .then((response) => response.json())
         .then((data) => {
           context.commit("setImages", data);
+          context.commit("incrementPage");
         })
         .catch((error) => {
           console.error("Error fetching images:", error);
