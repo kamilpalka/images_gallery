@@ -31,7 +31,9 @@
             </v-col>
             <v-col cols="12" v-else>
               <h2>{{ $store.state.page }}</h2>
-              <v-btn block color="primary" @click="loadMore">Load More</v-btn>
+              <v-btn block color="primary" @click="fetchImages"
+                >Load More</v-btn
+              >
             </v-col>
           </v-row>
         </v-container>
@@ -49,13 +51,11 @@ export default {
     ...mapGetters(["sortImages"]),
   },
   methods: {
+    // loadMore() { this.$store.dispatch("fetchImages"); },
     ...mapActions(["fetchImages"]),
-    loadMore() {
-      this.$store.dispatch("fetchImages");
-    },
   },
   mounted() {
-    this.loadMore();
+    this.fetchImages();
   },
 };
 </script>
