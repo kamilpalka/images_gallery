@@ -11,6 +11,8 @@ const store = createStore({
   getters: {
     sortImages: (state) =>
       state.images.sort((a, b) => a.author.localeCompare(b.author)),
+
+    // TODO: improve pagination
     // paginatedImages: (state, getters) => {
     //   let start = (state.page - 1) * state.maxImages;
     //   let end = start + state.maxImages;
@@ -30,7 +32,6 @@ const store = createStore({
       const page = context.state.page + 1;
       const limit = context.state.maxImages;
       const url = `https://picsum.photos/v2/list?page=${page}&limit=${limit}`;
-      console.log(url);
       await fetch(url)
         .then((response) => response.json())
         .then((data) => {
