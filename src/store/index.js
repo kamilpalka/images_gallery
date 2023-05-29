@@ -11,12 +11,11 @@ const store = createStore({
   getters: {
     sortImages: (state) =>
       state.images.sort((a, b) => a.author.localeCompare(b.author)),
-    paginatedImages: (state, getters) => {
-      const start = (state.page - 1) * state.maxImages;
-      const end = start + state.maxImages;
-      console.log(getters.sortImages.slice(start, end));
-      return getters.sortImages.slice(start, end);
-    },
+    // paginatedImages: (state, getters) => {
+    //   let start = (state.page - 1) * state.maxImages;
+    //   let end = start + state.maxImages;
+    //   return getters.sortImages.slice(start, end);
+    // },
   },
   mutations: {
     setImages(state, images) {
@@ -28,8 +27,9 @@ const store = createStore({
   },
   actions: {
     async fetchImages(context) {
-      const page = context.state.page;
-      const url = `https://picsum.photos/v2/list?page=${page}&limit=100`;
+      const page = context.state.page + 1;
+      const limit = context.state.maxImages;
+      const url = `https://picsum.photos/v2/list?page=${page}&limit=${limit}`;
       console.log(url);
       await fetch(url)
         .then((response) => response.json())

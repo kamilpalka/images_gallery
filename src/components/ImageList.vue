@@ -6,14 +6,13 @@
           <v-row justify="center">
             <v-col cols="12">
               <h1 class="text-center">Image Gallery</h1>
-              <h2>{{ $store.state.page }}</h2>
             </v-col>
             <v-col
               cols="12"
               sm="6"
               md="4"
               lg="3"
-              v-for="image in paginatedImages"
+              v-for="image in sortImages"
               :key="image.id"
             >
               <v-card class="mb-4">
@@ -27,10 +26,11 @@
                 }}</v-card-text>
               </v-card>
             </v-col>
-            <v-col cols="12" v-if="paginatedImages === 0">
+            <v-col cols="12" v-if="sortImages === 0">
               <p class="text-center">No images found.</p>
             </v-col>
             <v-col cols="12" v-else>
+              <h2>{{ $store.state.page }}</h2>
               <v-btn block color="primary" @click="loadMore">Load More</v-btn>
             </v-col>
           </v-row>
@@ -46,7 +46,7 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   computed: {
     //paginatedImages() { return this.$store.getters.paginatedImages; },
-    ...mapGetters(["paginatedImages"]),
+    ...mapGetters(["sortImages"]),
   },
   methods: {
     ...mapActions(["fetchImages"]),
@@ -55,7 +55,7 @@ export default {
     },
   },
   mounted() {
-    this.fetchImages();
+    this.loadMore();
   },
 };
 </script>
@@ -67,7 +67,16 @@ body,
   height: 100%;
 }
 
+.v-card {
+  box-shadow: 0 4px 6px -1px hsla(0, 87%, 34%, 0.884),
+    0 2px 4px -1px rgba(76, 9, 163, 0.911);
+}
+
 .v-card-text {
   color: #555;
+}
+
+.text-center {
+  text-align: center;
 }
 </style>
