@@ -15,7 +15,7 @@
               v-for="image in sortImages"
               :key="image.id"
             >
-              <v-card class="mb-4">
+              <v-card class="mb-4" variant="tonal">
                 <v-img
                   :src="image.download_url"
                   :alt="image.author"
@@ -61,22 +61,11 @@ export default {
 </script>
 
 <style>
-html,
-body,
-#app {
-  height: 100%;
-}
-
-.v-card {
-  box-shadow: 0 4px 6px -1px hsla(0, 87%, 34%, 0.884),
-    0 2px 4px -1px rgba(76, 9, 163, 0.911);
+.v-main {
+  background-color: gray;
 }
 
 .v-card-text {
   color: #555;
-}
-
-.text-center {
-  text-align: center;
 }
 </style>
