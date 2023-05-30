@@ -20,8 +20,8 @@ const store = createStore({
     // },
   },
   mutations: {
-    setImages(state, images) {
-      state.images = images;
+    setImages(state, data) {
+      state.images = data;
     },
     incrementPage(state) {
       state.page++;
